@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     {
         speed = 5f;
         timeBtwShots = 0f;
-        startBtwShots = 1f;
+        startBtwShots = 0.5f;
     }
 
     void Update()
@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour
         {
             if(Input.GetKey(KeyCode.Space))
             {
-                Instantiate(projectile, shotPoint.position, Quaternion.Euler(0, 0, 0));
+                Instantiate(projectile, shotPoint.position, transform.rotation);
                 timeBtwShots = startBtwShots;
             }
         }
