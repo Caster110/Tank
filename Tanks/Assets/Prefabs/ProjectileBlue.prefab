@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5341067710740332917}
   - component: {fileID: -7420995301313813124}
   - component: {fileID: -7067623786070723097}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ProjectileBlue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -99,11 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a760e6d5d9e7c004297ae45d45f90199, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0
   lifeTime: 0
-  whatIsSolid:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!58 &-7420995301313813124
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -149,19 +145,19 @@ Rigidbody2D:
   m_GameObject: {fileID: 8636781713075991441}
   m_BodyType: 0
   m_Simulated: 1
-  m_UseFullKinematicContacts: 0
+  m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_GravityScale: 0
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 2a6cf202cddf9a945b6e010f255cda26, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0

@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     public Transform SelfTransform;
     private Vector3 force;
     public float speed;
+    private Rigidbody2D rb;
 
     public GameObject projectile;
     public Transform shotPoint;
@@ -15,6 +16,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        rb = GetComponent<Rigidbody2D>();
         speed = 5f;
         timeBtwShots = 0f;
         startBtwShots = 0.5f;
@@ -22,7 +24,28 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (timeBtwShots <= 0)
+        {
+            if(Input.GetKey(KeyCode.Space))
+            {
+                float radian = transform.rotation.eulerAngles.z * Mathf.Deg2Rad + Mathf.PI/2;
+                GameObject pjtl = Instantiate(projectile, shotPoint.position, transform.rotation);
+                pjtl.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos(radian), Mathf.Sin(radian)) * (speed + 1f);
+                timeBtwShots = startBtwShots;
+                Debug.Log(radian);
+            }
+        }
+        else
+        {
+            timeBtwShots -= Time.deltaTime;
+        }
+    }
+
+    void FixedUpdate()
+    {
         SelfTransform.position += force;
+        Vector3 position = rb.position;
+        rb.position = SelfTransform.position;
         force = Vector3.zero;
 
         if (Input.GetKey(KeyCode.W))
@@ -34,18 +57,5 @@ public class PlayerController : MonoBehaviour
             SelfTransform.Rotate(0, 0, 2);
         if (Input.GetKey(KeyCode.D))
             SelfTransform.Rotate(0, 0, -2);
-
-        if (timeBtwShots <= 0)
-        {
-            if(Input.GetKey(KeyCode.Space))
-            {
-                Instantiate(projectile, shotPoint.position, transform.rotation);
-                timeBtwShots = startBtwShots;
-            }
-        }
-        else
-        {
-            timeBtwShots -= Time.deltaTime;
-        }
     }
 }
