@@ -5,11 +5,10 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     public float lifeTime;
-    private Rigidbody2D rb;
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
         lifeTime = 5f;
+        Destroy(gameObject, lifeTime);
     }
     void Update()
     {
@@ -21,6 +20,9 @@ public class Projectile : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
+        {
+            collision.gameObject.SetActive(false);
             Destroy(gameObject);
+        }
     }
 }

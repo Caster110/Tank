@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public Transform SelfTransform;
-    private Vector3 force;
+    private Vector2 force;
     public float speed;
     private Rigidbody2D rb;
 
@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        Vector3 position = rb.position;
         speed = 5f;
         timeBtwShots = 0f;
         startBtwShots = 0.5f;
@@ -30,9 +31,8 @@ public class PlayerController : MonoBehaviour
             {
                 float radian = transform.rotation.eulerAngles.z * Mathf.Deg2Rad + Mathf.PI/2;
                 GameObject pjtl = Instantiate(projectile, shotPoint.position, transform.rotation);
-                pjtl.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos(radian), Mathf.Sin(radian)) * (speed + 1f);
+                pjtl.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos(radian), Mathf.Sin(radian)) * (speed + 1.5f);
                 timeBtwShots = startBtwShots;
-                Debug.Log(radian);
             }
         }
         else
@@ -43,19 +43,18 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        SelfTransform.position += force;
-        Vector3 position = rb.position;
-        rb.position = SelfTransform.position;
-        force = Vector3.zero;
+        Vector2 rigid = rb.position;
+        Vector2 objPos = SelfTransform.up;
 
         if (Input.GetKey(KeyCode.W))
-            force += SelfTransform.up * Time.deltaTime * speed;
+            rigid += objPos * Time.deltaTime * speed;
         if (Input.GetKey(KeyCode.S))
-            force += -SelfTransform.up * Time.deltaTime * (speed - 1f);
+            rigid += -objPos * Time.deltaTime * (speed - 1f);
+        rb.MovePosition(rigid);
 
         if (Input.GetKey(KeyCode.A))
-            SelfTransform.Rotate(0, 0, 2);
+            SelfTransform.Rotate(0, 0, 2.5f);
         if (Input.GetKey(KeyCode.D))
-            SelfTransform.Rotate(0, 0, -2);
+            SelfTransform.Rotate(0, 0, -2.5f);
     }
 }
