@@ -5,56 +5,55 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public Transform SelfTransform;
-    private Vector2 force;
     public float speed;
     private Rigidbody2D rb;
+    private Vector2 rigidPos;
 
     public GameObject projectile;
     public Transform shotPoint;
+    private float timerBtwShots;
     private float timeBtwShots;
-    private float startBtwShots;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        Vector3 position = rb.position;
         speed = 5f;
-        timeBtwShots = 0f;
-        startBtwShots = 0.5f;
+        timeBtwShots = 0.37f;
     }
 
     void Update()
     {
-        if (timeBtwShots <= 0)
+        if (timerBtwShots <= 0)
         {
-            if(Input.GetKey(KeyCode.Space))
+            if (Input.GetKey(KeyCode.Space))
             {
-                float radian = transform.rotation.eulerAngles.z * Mathf.Deg2Rad + Mathf.PI/2;
+                float radian = transform.rotation.eulerAngles.z * Mathf.Deg2Rad + Mathf.PI / 2;
                 GameObject pjtl = Instantiate(projectile, shotPoint.position, transform.rotation);
                 pjtl.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos(radian), Mathf.Sin(radian)) * (speed + 1.5f);
-                timeBtwShots = startBtwShots;
+                timerBtwShots = timeBtwShots;
             }
         }
         else
         {
-            timeBtwShots -= Time.deltaTime;
+            timerBtwShots -= Time.deltaTime;
         }
     }
 
-    void FixedUpdate()
+void FixedUpdate()
     {
-        Vector2 rigid = rb.position;
+        rigidPos = rb.position;
         Vector2 objPos = SelfTransform.up;
 
         if (Input.GetKey(KeyCode.W))
-            rigid += objPos * Time.deltaTime * speed;
+            rigidPos += objPos * Time.deltaTime * speed;
         if (Input.GetKey(KeyCode.S))
-            rigid += -objPos * Time.deltaTime * (speed - 1f);
-        rb.MovePosition(rigid);
-
+            rigidPos -= objPos * Time.deltaTime * (speed - 1f);
+        
         if (Input.GetKey(KeyCode.A))
-            SelfTransform.Rotate(0, 0, 2.5f);
+            SelfTransform.Rotate(0, 0, 3f);
         if (Input.GetKey(KeyCode.D))
-            SelfTransform.Rotate(0, 0, -2.5f);
+            SelfTransform.Rotate(0, 0, -3f);
+
+        rb.MovePosition(rigidPos);
     }
 }
