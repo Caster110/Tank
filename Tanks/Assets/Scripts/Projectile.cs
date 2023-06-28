@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
+    private MapManager mapManager;
     public float lifeTime;
     void Start()
     {
@@ -16,6 +17,8 @@ public class Projectile : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             collision.gameObject.SetActive(false);
+            mapManager = GameObject.Find("MapManager").GetComponent<MapManager>();
+            mapManager.StartCoroutine("OnWin");
             Destroy(gameObject);
         }
     }
