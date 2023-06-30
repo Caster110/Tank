@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    private MapManager mapManager;
-    public float lifeTime;
+    private static GameManager manager;
+    private float lifeTime;
     void Start()
     {
         lifeTime = 7f;
@@ -16,10 +16,22 @@ public class Projectile : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            collision.gameObject.SetActive(false);
-            mapManager = GameObject.Find("MapManager").GetComponent<MapManager>();
-            mapManager.StartCoroutine("OnWin");
+            Destroy(collision.gameObject);
+
+            if (GameObject.FindGameObjectsWithTag("Player").Length == 2)
+            {
+                manager = GameObject.Find("GameManager").GetComponent<GameManager>();
+                manager.StartCoroutine("OnWin");
+            }
             Destroy(gameObject);
         }
+    }
+
+    private void OnDestroy()
+    {
+        if (gameObject.name == "ProjectileBlue(Clone)")
+            MainPlayerController.projectileCount--;
+        else
+            SidePlayerController.projectileCount--;
     }
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MainPlayerController : MonoBehaviour
+public class SidePlayerController : MonoBehaviour
 {
     private Transform SelfTransform;
     public float speed;
@@ -27,7 +27,7 @@ public class MainPlayerController : MonoBehaviour
     {
         if (timerBtwShots <= 0)
         {
-            if (Input.GetKey(KeyCode.Space) && projectileCount <= 5)
+            if (Input.GetKey(KeyCode.Slash) && projectileCount <= 5)
             {
                 float radian = transform.rotation.eulerAngles.z * Mathf.Deg2Rad + Mathf.PI / 2;
                 GameObject pjtl = Instantiate(projectile, shotPoint.position, transform.rotation);
@@ -41,24 +41,23 @@ public class MainPlayerController : MonoBehaviour
             timerBtwShots -= Time.deltaTime;
         }
     }
-
-    private void OnDestroy()
+    public void OnDestroy()
     {
-        GameManager.redWin = true;
+        GameManager.blueWin = true;
     }
     void FixedUpdate()
     {
         rigidPos = rb.position;
         Vector2 objPos = SelfTransform.up;
 
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKey(KeyCode.UpArrow))
             rigidPos += objPos * Time.deltaTime * speed;
-        if (Input.GetKey(KeyCode.S))
+        if (Input.GetKey(KeyCode.DownArrow))
             rigidPos -= objPos * Time.deltaTime * (speed - 1f);
         
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.LeftArrow))
             SelfTransform.Rotate(0, 0, 3f);
-        if (Input.GetKey(KeyCode.D))
+        if (Input.GetKey(KeyCode.RightArrow))
             SelfTransform.Rotate(0, 0, -3f);
 
         rb.MovePosition(rigidPos);

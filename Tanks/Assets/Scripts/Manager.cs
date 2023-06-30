@@ -5,20 +5,20 @@ using UnityEngine.SceneManagement;
 
 public static class Map
 {
-    public static int number;
+    public static int number = 1;
 }
 public class Manager : MonoBehaviour
 {
-    public void Choice(int i)
+    private void Choice(int i)
     {
         Map.number = i;
     }
-    public void Exit()
+    private void Exit()
     {
         Application.Quit();
     }
 
-    public void Play()
+    private void Play()
     {
         SceneManager.LoadScene("Game");
     }
