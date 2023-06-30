@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    private static GameManager manager;
+    private GameManager manager;
     private float lifeTime;
     void Start()
     {
         lifeTime = 7f;
         Destroy(gameObject, lifeTime);
+        manager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -18,9 +19,8 @@ public class Projectile : MonoBehaviour
         {
             Destroy(collision.gameObject);
 
-            if (GameObject.FindGameObjectsWithTag("Player").Length == 2)
+            if (manager.coroutineInProcess == false)
             {
-                manager = GameObject.Find("GameManager").GetComponent<GameManager>();
                 manager.StartCoroutine("OnWin");
             }
             Destroy(gameObject);
