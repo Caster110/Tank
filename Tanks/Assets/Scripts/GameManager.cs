@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    private GameObject[] projectiles;
-    private new Transform camera;
+    private static GameObject[] projectiles;
+    private static new Transform camera;
 
     public static bool redWin;
     public static bool blueWin;
@@ -16,25 +16,25 @@ public class GameManager : MonoBehaviour
     private static int valueRedPoints;
     private static int valueBluePoints;
 
-    public GameObject playerBlue;
-    public GameObject playerRed;
+    private static GameObject playerBlue;
+    private static GameObject playerRed;
+    GameObject tempBlue;
+    GameObject tempRed;
 
-    private Vector2 blueSpawn;
-    private Vector2 redSpawn;
-    public bool coroutineInProcess;
+    private static Vector2 blueSpawn;
+    private static Vector2 redSpawn;
+    public static bool coroutineInProcess = false;
 
-    public void Start()
+
+    private void Start()
     {
-        textBluePoints = GameObject.Find("BluePoints").GetComponent<Text>();
-        textRedPoints = GameObject.Find("RedPoints").GetComponent<Text>();
-
-        coroutineInProcess = false;
-
-        valueBluePoints = 0;
-        valueRedPoints = 0;
-        
         camera = GameObject.Find("Main Camera").GetComponent<Transform>();
 
+        textRedPoints = GameObject.Find("RedPoints").GetComponent<Text>();
+        textBluePoints = GameObject.Find("BluePoints").GetComponent<Text>();
+
+        playerBlue = Resources.Load<GameObject>("PlayerBlue");
+        playerRed = Resources.Load<GameObject>("PlayerRed");
     }
     public IEnumerator OnWin()
     {
@@ -62,10 +62,11 @@ public class GameManager : MonoBehaviour
         redWin = false;
         blueWin = false;
 
+        coroutineInProcess = false;
         StopCoroutine("OnWin");
     }
 
-    private void ProjDestroy()
+    private static void ProjDestroy()
     {
         Time.timeScale = 1f;
         projectiles = GameObject.FindGameObjectsWithTag("Projectile");
@@ -75,11 +76,11 @@ public class GameManager : MonoBehaviour
 
     public void ChangeMap()
     {
-        coroutineInProcess = false;
-        int map = Map.number;
+
+        int mapNumber = MenuManager.chosenMap;
         //if (Map.isRandom == true)
         //    map = Random(1, 5);
-        switch (map)
+        switch (mapNumber)
         {
             case 1:
                 camera.position = new Vector3(-24f, 8.5f, -10f);
@@ -94,9 +95,14 @@ public class GameManager : MonoBehaviour
 
     private void Spawn()
     {
-        Destroy(GameObject.Find("PlayerRed(Clone)"));
-        Destroy(GameObject.Find("PlayerBlue(Clone)"));
-        Instantiate(playerRed, redSpawn, playerRed.transform.rotation);
-        Instantiate(playerBlue, blueSpawn, playerBlue.transform.rotation);
+        if (coroutineInProcess)
+        {
+            Destroy(tempRed);
+            Destroy(tempBlue);
+        }
+        GameObject redPlayerOnScene = Instantiate(playerRed, redSpawn, playerRed.transform.rotation);
+        GameObject bluePlayerOnScene = Instantiate(playerBlue, blueSpawn, playerBlue.transform.rotation);
+        tempBlue = bluePlayerOnScene;
+        tempRed = redPlayerOnScene;
     }
 }

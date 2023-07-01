@@ -5,10 +5,9 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     private GameManager manager;
-    private float lifeTime;
+    private float lifeTime = 7f;
     void Start()
     {
-        lifeTime = 7f;
         Destroy(gameObject, lifeTime);
         manager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
@@ -19,10 +18,9 @@ public class Projectile : MonoBehaviour
         {
             Destroy(collision.gameObject);
 
-            if (manager.coroutineInProcess == false)
-            {
+            if (!GameManager.coroutineInProcess)
                 manager.StartCoroutine("OnWin");
-            }
+
             Destroy(gameObject);
         }
     }

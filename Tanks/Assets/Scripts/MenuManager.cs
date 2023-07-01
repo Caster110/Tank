@@ -3,22 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public static class Map
+public class MenuManager : MonoBehaviour
 {
-    public static int number = 1;
-}
-public class Manager : MonoBehaviour
-{
+    public static int chosenMap = 1;
     private void Choice(int i)
     {
-        Map.number = i;
+        chosenMap = i;
     }
-    private void Exit()
+    public void Exit()
     {
         Application.Quit();
     }
 
-    private void Play()
+    public void Play()
     {
         SceneManager.LoadScene("Game");
     }
