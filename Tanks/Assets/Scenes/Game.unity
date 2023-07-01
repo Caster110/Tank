@@ -329,6 +329,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerBlue: {fileID: 1454004549298236253, guid: 0571e06a7b8a4814ba1c53804cdcc928, type: 3}
   playerRed: {fileID: 1454004549298236253, guid: d81803fa4bd8d1440bf0722a6c7b2084, type: 3}
+  coroutineInProcess: 0
 --- !u!1 &1448479718
 GameObject:
   m_ObjectHideFlags: 0
