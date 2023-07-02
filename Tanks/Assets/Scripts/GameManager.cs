@@ -18,12 +18,14 @@ public class GameManager : MonoBehaviour
 
     private static GameObject playerBlue;
     private static GameObject playerRed;
-    GameObject tempBlue;
-    GameObject tempRed;
+    GameObject prevBluePlayerMemory;
+    GameObject prevRedPlayerMemory;
 
     private static Vector2 blueSpawn;
     private static Vector2 redSpawn;
     public static bool coroutineInProcess = false;
+    private int mapNumber = MenuManager.chosenMap;
+    private bool isRandomMap = MenuManager.chosenRandomMap;
 
 
     private void Start()
@@ -76,13 +78,19 @@ public class GameManager : MonoBehaviour
 
     public void ChangeMap()
     {
-
-        int mapNumber = MenuManager.chosenMap;
-        //if (Map.isRandom == true)
-        //    map = Random(1, 5);
+        //if (isRandomMap)
+        //    mapNumber = Random(1, 5);
         switch (mapNumber)
         {
             case 1:
+                camera.position = new Vector3(-49f, 8.5f, -10f);
+
+                redSpawn = new Vector2(-44f, 11f);
+                blueSpawn = new Vector2(-54f, 6f);
+
+                Spawn();
+                break;
+            case 2:
                 camera.position = new Vector3(-24f, 8.5f, -10f);
 
                 redSpawn = new Vector2(-19f, 11f);
@@ -90,6 +98,23 @@ public class GameManager : MonoBehaviour
 
                 Spawn();
                 break;
+            case 3:
+                camera.position = new Vector3(-49f, -7.5f, -10f);
+
+                redSpawn = new Vector2(-44f, -7.5f);
+                blueSpawn = new Vector2(-54f, -7.5f);
+
+                Spawn();
+                break;
+            case 4:
+                camera.position = new Vector3(-24f, -7.5f, -10f);
+
+                redSpawn = new Vector2(-19f, -7.5f);
+                blueSpawn = new Vector2(-29f, -7.5f);
+
+                Spawn();
+                break;
+
         }
     }
 
@@ -97,12 +122,12 @@ public class GameManager : MonoBehaviour
     {
         if (coroutineInProcess)
         {
-            Destroy(tempRed);
-            Destroy(tempBlue);
+            Destroy(prevRedPlayerMemory);
+            Destroy(prevBluePlayerMemory);
         }
         GameObject redPlayerOnScene = Instantiate(playerRed, redSpawn, playerRed.transform.rotation);
         GameObject bluePlayerOnScene = Instantiate(playerBlue, blueSpawn, playerBlue.transform.rotation);
-        tempBlue = bluePlayerOnScene;
-        tempRed = redPlayerOnScene;
+        prevBluePlayerMemory = bluePlayerOnScene;
+        prevRedPlayerMemory = redPlayerOnScene;
     }
 }

@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class MenuManager : MonoBehaviour
 {
     public static int chosenMap = 1;
+    public static bool chosenRandomMap;
     private void Choice(int i)
     {
         chosenMap = i;
