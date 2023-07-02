@@ -16,10 +16,10 @@ public class GameManager : MonoBehaviour
     private static int valueRedPoints;
     private static int valueBluePoints;
 
-    private static GameObject playerBlue;
-    private static GameObject playerRed;
-    GameObject prevBluePlayerMemory;
-    GameObject prevRedPlayerMemory;
+    [SerializeField] private GameObject playerBlue;
+    [SerializeField] private GameObject playerRed;
+    GameObject bluePlayerOnScene;
+    GameObject redPlayerOnScene;
 
     private static Vector2 blueSpawn;
     private static Vector2 redSpawn;
@@ -34,9 +34,6 @@ public class GameManager : MonoBehaviour
 
         textRedPoints = GameObject.Find("RedPoints").GetComponent<Text>();
         textBluePoints = GameObject.Find("BluePoints").GetComponent<Text>();
-
-        playerBlue = Resources.Load<GameObject>("PlayerBlue");
-        playerRed = Resources.Load<GameObject>("PlayerRed");
     }
     public IEnumerator OnWin()
     {
@@ -45,24 +42,15 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
         yield return new WaitForSecondsRealtime(1);
 
-        if (GameObject.Find("PlayerBlue(Clone)") == null)
-        {
-            valueRedPoints++;
-            textRedPoints.text = valueRedPoints.ToString();
-        }
-        if (GameObject.Find("PlayerRed(Clone)") == null)
-        {
-            valueBluePoints++;
-            textBluePoints.text = valueBluePoints.ToString();
-        }
+        if (bluePlayerOnScene == null)
+            textRedPoints.text = (++valueRedPoints).ToString();
+        if (redPlayerOnScene == null)
+            textBluePoints.text = (++valueBluePoints).ToString();
 
         yield return new WaitForSecondsRealtime(2);
 
         ProjDestroy();
         ChangeMap();
-
-        redWin = false;
-        blueWin = false;
 
         coroutineInProcess = false;
         StopCoroutine("OnWin");
@@ -84,50 +72,49 @@ public class GameManager : MonoBehaviour
         {
             case 1:
                 camera.position = new Vector3(-49f, 8.5f, -10f);
-
-                redSpawn = new Vector2(-44f, 11f);
-                blueSpawn = new Vector2(-54f, 6f);
-
-                Spawn();
+                redSpawn = new Vector2(-42f, 13.5f);
+                blueSpawn = new Vector2(-56f, 3.5f);
                 break;
             case 2:
                 camera.position = new Vector3(-24f, 8.5f, -10f);
-
                 redSpawn = new Vector2(-19f, 11f);
                 blueSpawn = new Vector2(-29f, 6f);
-
-                Spawn();
                 break;
             case 3:
-                camera.position = new Vector3(-49f, -7.5f, -10f);
-
-                redSpawn = new Vector2(-44f, -7.5f);
+                camera.position = new Vector3(-50f, -7.5f, -10f);
+                redSpawn = new Vector2(-43f, -7.5f);
                 blueSpawn = new Vector2(-54f, -7.5f);
-
-                Spawn();
                 break;
             case 4:
                 camera.position = new Vector3(-24f, -7.5f, -10f);
-
-                redSpawn = new Vector2(-19f, -7.5f);
-                blueSpawn = new Vector2(-29f, -7.5f);
-
-                Spawn();
+                redSpawn = new Vector2(-19f, -20);
+                blueSpawn = new Vector2(-29f, -20f);
                 break;
-
+            case 5:
+                camera.position = new Vector3(-49f, -23.5f, -10f);
+                redSpawn = new Vector2(-44f, -20f);
+                blueSpawn = new Vector2(-54f, -20f);
+                break;
+            case 6:
+                camera.position = new Vector3(-24f, -23.5f, -10f);
+                redSpawn = new Vector2(-19f, -20f);
+                blueSpawn = new Vector2(-29f, -20f);
+                break;
         }
+        Spawn();
     }
 
     private void Spawn()
     {
+
+        redWin = false;
+        blueWin = false;
         if (coroutineInProcess)
         {
-            Destroy(prevRedPlayerMemory);
-            Destroy(prevBluePlayerMemory);
+            Destroy(redPlayerOnScene);
+            Destroy(bluePlayerOnScene);
         }
-        GameObject redPlayerOnScene = Instantiate(playerRed, redSpawn, playerRed.transform.rotation);
-        GameObject bluePlayerOnScene = Instantiate(playerBlue, blueSpawn, playerBlue.transform.rotation);
-        prevBluePlayerMemory = bluePlayerOnScene;
-        prevRedPlayerMemory = redPlayerOnScene;
+        redPlayerOnScene = Instantiate(playerRed, redSpawn, playerRed.transform.rotation);
+        bluePlayerOnScene = Instantiate(playerBlue, blueSpawn, playerBlue.transform.rotation);
     }
 }

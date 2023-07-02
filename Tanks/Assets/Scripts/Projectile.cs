@@ -5,7 +5,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     private GameManager manager;
-    private float lifeTime = 7f;
+    private float lifeTime = 8f;
     void Start()
     {
         Destroy(gameObject, lifeTime);

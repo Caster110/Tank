@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class MainPlayerController : MonoBehaviour
 {
-    private Transform SelfTransform;
     private float speed;
-    private Rigidbody2D rb;
-    private Vector2 rigidPos;
+    private Rigidbody2D rigidBody;
+    private Vector2 rigidBodyNextPosition;
 
     [SerializeField] private GameObject projectile;
     [SerializeField] private Transform shotPoint;
@@ -17,8 +16,7 @@ public class MainPlayerController : MonoBehaviour
 
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        SelfTransform = GetComponent<Transform>();
+        rigidBody = GetComponent<Rigidbody2D>();
         speed = 4.5f;
         staticTimeBtwShots = 0.38f;
     }
@@ -31,7 +29,7 @@ public class MainPlayerController : MonoBehaviour
             {
                 float radian = transform.rotation.eulerAngles.z * Mathf.Deg2Rad + Mathf.PI / 2;
                 GameObject projectileObject = Instantiate(projectile, shotPoint.position, transform.rotation);
-                projectileObject.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos(radian), Mathf.Sin(radian)) * (speed + 1.5f);
+                projectileObject.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos(radian), Mathf.Sin(radian)) * (speed + 2f);
                 timerBtwShots = staticTimeBtwShots;
                 projectileCount++;
             }
@@ -48,19 +46,20 @@ public class MainPlayerController : MonoBehaviour
     }
     void FixedUpdate()
     {
-        rigidPos = rb.position;
-        Vector2 objPos = SelfTransform.up;
+        rigidBodyNextPosition = rigidBody.position;
+        Vector2 objectNextPosition = transform.up;
 
         if (Input.GetKey(KeyCode.W))
-            rigidPos += objPos * Time.deltaTime * speed;
+            rigidBodyNextPosition += objectNextPosition * Time.deltaTime * speed;
         if (Input.GetKey(KeyCode.S))
-            rigidPos -= objPos * Time.deltaTime * (speed - 1f);
-        
-        if (Input.GetKey(KeyCode.A))
-            SelfTransform.Rotate(0, 0, 3f);
-        if (Input.GetKey(KeyCode.D))
-            SelfTransform.Rotate(0, 0, -3f);
+            rigidBodyNextPosition -= objectNextPosition * Time.deltaTime * (speed - 1f);
 
-        rb.MovePosition(rigidPos);
+        rigidBody.MovePosition(rigidBodyNextPosition);
+
+        if (Input.GetKey(KeyCode.A))
+            rigidBody.MoveRotation(rigidBody.rotation + 3f);
+        if (Input.GetKey(KeyCode.D))
+            rigidBody.MoveRotation(rigidBody.rotation - 3f);
+        rigidBody.angularVelocity = 0f;
     }
 }
