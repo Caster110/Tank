@@ -17,6 +17,7 @@ public class MainPlayerController : MonoBehaviour
     void Start()
     {
         rigidBody = GetComponent<Rigidbody2D>();
+        rigidBody.centerOfMass = Vector3.zero;
         speed = 4.5f;
         staticTimeBtwShots = 0.38f;
     }
