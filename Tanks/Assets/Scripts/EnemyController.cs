@@ -1,133 +1,77 @@
 using System;
 using UnityEngine;
-using UnityEngine.AI;
 
-namespace DefaultNamespace
+public class EnemyController : MonoBehaviour
 {
-    public class NavMeshVehicleMovement : MonoBehaviour
+    private GameObject targetPlayer;
+    private Vector3 directionOfTank;
+    private Vector3 directionToPlayer;
+    private float speed;
+    private Rigidbody2D rigidBody;
+    private Vector2 rigidBodyNextPosition;
+
+    [SerializeField] private GameObject projectile;
+    [SerializeField] private Transform shotPoint;
+    [SerializeField] private Transform centerPoint;
+
+    private RaycastHit2D raycastAim;
+    private float timerBtwShots;
+    private float staticTimeBtwShots;
+    public void Start()
     {
-        private NavMeshAgent navMeshAgent;
+        targetPlayer = GameObject.Find("PlayerBlue");
+        rigidBody = GetComponent<Rigidbody2D>();
+        rigidBody.centerOfMass = Vector3.zero;
+        speed = 4f;
+        staticTimeBtwShots = 0.6f;
+    }
 
-        public bool overrideMovementCtrl;
-        public bool moveByAnim;
+    public void Update()
+    {
+        timerBtwShots -= Time.deltaTime;
+    }
 
-        
-        public bool isTurnRound;
-        private bool hasSetTurnRoundDes = false;
+    private void FixedUpdate()
+    {
+        SelectDirection();
+        raycastAim = Physics2D.Raycast(shotPoint.position, directionOfTank, 5f);
+        if (directionToPlayer.magnitude > 6f)
+            Move();
+        else if (timerBtwShots <= 0 && raycastAim == targetPlayer)
+            Shoot();
+    }
+    private void Move()
+    {
+        rigidBodyNextPosition = rigidBody.position;
+        Vector2 objectNextPosition = transform.up;
 
-        public float turnRadius = 4;
-        public int turnDegreeStepValue = 120;
-        public int turnAngleThreshold = 90;// turn when angle>this variable
+        rigidBodyNextPosition += objectNextPosition * Time.deltaTime * speed;
 
-        public void Start()
+        rigidBody.MovePosition(rigidBodyNextPosition);
+        rigidBody.angularVelocity = 0f;
+    }
+
+    private void Shoot ()
+    {
+        float radian = transform.rotation.eulerAngles.z * Mathf.Deg2Rad + Mathf.PI / 2;
+        GameObject projectileObject = Instantiate(projectile, shotPoint.position, transform.rotation);
+        projectileObject.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos(radian), Mathf.Sin(radian)) * (speed + 2f);
+        timerBtwShots = staticTimeBtwShots;
+    }
+
+    private void SelectDirection()
+    {
+        targetPlayer = GameObject.Find("PlayerBlue");
+        directionOfTank = shotPoint.position - centerPoint.position;
+        directionToPlayer = targetPlayer.transform.position - shotPoint.position;
+        if (raycastAim != targetPlayer)
         {
-            navMeshAgent = GetComponent<NavMeshAgent>();
-        }
-        
-        
-        private Vector3 realDest;//the point you clicked
-        private Vector3 d1;//the temporary turn point
-       
-
-        public void Update()
-        {
-
-            if (overrideMovementCtrl == false || navMeshAgent.enabled == false || HasArrived() ||
-                navMeshAgent.isStopped)
-                return;
-
-
-            Vector3 targetDir = navMeshAgent.destination - transform.position;
-            if (Vector3.Angle(targetDir, transform.forward) > turnAngleThreshold && isTurnRound == false)//if destination is in the back and not in TurnRound Status
-            {
-                realDest = navMeshAgent.destination;
-                isTurnRound = true;//execute this segment  only once; 
-                navMeshAgent.autoBraking = false;//just try to set this to true and you will know why
-            }
-
-
-            if (isTurnRound)
-            {
-                if (hasSetTurnRoundDes == false) //set the first temporary turn point to enable the loop
-                {
-                    d1 = FindTurnPoint(realDest);
-                    hasSetTurnRoundDes = true;
-                    navMeshAgent.SetDestination(d1);
-                }
-
-                if (Vector3.Distance(transform.position, d1) <= navMeshAgent.stoppingDistance*1.2f)//set next turn point when arrived turn point
-                {
-                    if (Vector3.Angle(realDest - transform.position, transform.forward) > turnAngleThreshold)// if angle > threshold,find next turn point
-                    {
-                        d1 = FindTurnPoint(realDest);
-                        navMeshAgent.SetDestination(d1);
-                    }
-                }
-
-                if (Vector3.Angle(realDest - transform.position, transform.forward) < turnAngleThreshold)//End the turn when the Angle is less than 90 degrees
-                {
-                    navMeshAgent.SetDestination(realDest);
-                    hasSetTurnRoundDes = false;
-                    isTurnRound = false;
-                    navMeshAgent.autoBraking = true;
-                }
-            }
-
-            Vector3 FindTurnPoint(Vector3 realDest)//Find temporary turn point;
-            {
-                Vector3 direction = realDest - transform.position;
-                var cross = Vector3.Cross(transform.forward, direction);
-                //The cross product determines whether the target location is to the left or to the right and determines which way to rotate
-                Vector3 targetPos;
-                NavMeshHit navMeshHit;
-                if (cross.y < 0) //left side
-                {
-                    targetPos = transform.position - transform.right * turnRadius -
-                                transform.right * (turnRadius * Mathf.Cos((180 - turnDegreeStepValue) * Mathf.Deg2Rad)) +
-                                transform.forward * (turnRadius * Mathf.Sin((180 - turnDegreeStepValue) * Mathf.Deg2Rad));
-                }
-                else //right side
-                {
-                    targetPos = transform.position + transform.right * turnRadius +
-                                transform.right * (turnRadius * Mathf.Cos(turnDegreeStepValue * Mathf.Deg2Rad)) +
-                                transform.forward * (turnRadius * Mathf.Sin(turnDegreeStepValue * Mathf.Deg2Rad));
-                }
-
-                //SamplePosition
-                //The radius should not be too large
-                if (NavMesh.SamplePosition(targetPos, out navMeshHit, 2f, -1))
-                {
-                    targetPos = navMeshHit.position; 
-                }
-                else // cant find valid pos on NavMesh,return realDest
-                {
-                    targetPos = this.realDest;
-                }
-
-                return targetPos;
-            }
-        }
-
-        public void SetRealDest(Vector3 pos)//the real destination is the position you clicked;
-        {
-            realDest = pos;
-        }
-
-       
-
-        private bool HasArrived()
-        {
-            float remainingDistance;
-            if (navMeshAgent.pathPending)
-            {
-                remainingDistance = float.PositiveInfinity;
-            }
+            RaycastHit2D raycastToPlayer = Physics2D.Raycast(shotPoint.position, directionToPlayer, 5f);
+            Vector3 side = Vector3.Cross(directionOfTank, directionToPlayer);
+            if(Vector3.SignedAngle(directionOfTank, directionToPlayer, Vector3.forward) > 0f)
+                rigidBody.MoveRotation(rigidBody.rotation + 2f);
             else
-            {
-                remainingDistance = navMeshAgent.remainingDistance;
-            }
-
-            return remainingDistance <= navMeshAgent.stoppingDistance;
+                rigidBody.MoveRotation(rigidBody.rotation - 2f);
         }
     }
 }
