@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SidePlayerController : MonoBehaviour
+public class SidePlayerController : GameManager
 {
     private float speed;
     private Rigidbody2D rigidBody;
@@ -13,13 +13,16 @@ public class SidePlayerController : MonoBehaviour
     private float timerBtwShots;
     private float staticTimeBtwShots;
     public static int projectileCount;
+    private GameManager manager;
 
     void Start()
     {
+        projectileCount = 0;
         rigidBody = GetComponent<Rigidbody2D>();
         rigidBody.centerOfMass = Vector3.zero;
         speed = 4.5f;
         staticTimeBtwShots = 0.38f;
+        manager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     void Update()
@@ -28,9 +31,9 @@ public class SidePlayerController : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.Slash) && projectileCount <= 5 && Time.timeScale != 0f)
             {
-                float radian = transform.rotation.eulerAngles.z * Mathf.Deg2Rad + Mathf.PI / 2;
+                float rotationToRadian = transform.rotation.eulerAngles.z * Mathf.Deg2Rad + Mathf.PI / 2;
                 GameObject projectileObject = Instantiate(projectile, shotPoint.position, transform.rotation);
-                projectileObject.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos(radian), Mathf.Sin(radian)) * (speed + 2f);
+                projectileObject.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos(rotationToRadian), Mathf.Sin(rotationToRadian)) * (speed + 2f);
                 timerBtwShots = staticTimeBtwShots;
                 projectileCount++;
             }
@@ -40,10 +43,16 @@ public class SidePlayerController : MonoBehaviour
             timerBtwShots -= Time.deltaTime;
         }
     }
-    public void OnDestroy()
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        GameManager.blueWin = true;
+        if (collision.gameObject.tag == "Projectile")
+        {
+            manager.OnDefeat();
+            blueWin = true;
+            Destroy(gameObject);
+        }
     }
+
     void FixedUpdate()
     {
         rigidBodyNextPosition = rigidBody.position;

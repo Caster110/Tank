@@ -327,6 +327,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8c0c15aafb81bf4d804e723e44f942f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  camera: {fileID: 1477865024}
+  panel: {fileID: 0}
+  textRedPoints: {fileID: 242310652}
+  textBluePoints: {fileID: 556461238}
   playerBlue: {fileID: 1454004549298236253, guid: 0571e06a7b8a4814ba1c53804cdcc928, type: 3}
   playerRed: {fileID: 1454004549298236253, guid: d81803fa4bd8d1440bf0722a6c7b2084, type: 3}
 --- !u!1 &1448479718

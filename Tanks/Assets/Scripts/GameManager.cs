@@ -1,18 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    private static GameObject[] projectiles;
-    private static new Transform camera;
+    protected GameObject[] projectiles;
+    [SerializeField] private new Transform camera;
+    [SerializeField] private GameObject panel;
+    [SerializeField] private GameObject button;
 
-    public static bool redWin;
-    public static bool blueWin;
+    public bool redWin;
+    public bool blueWin;
 
-    private static Text textRedPoints;
-    private static Text textBluePoints;
+    [SerializeField] private Text textRedPoints;
+    [SerializeField] private Text textBluePoints;
     private static int valueRedPoints;
     private static int valueBluePoints;
 
@@ -26,15 +29,22 @@ public class GameManager : MonoBehaviour
     public static bool coroutineInProcess = false;
     private int mapNumber = MenuManager.chosenMap;
     private bool isRandomMap = MenuManager.chosenRandomMap;
+    protected bool isOnePlayerGame => SceneManager.GetActiveScene().name == "OnePlayerGame";
 
-
-    private void Start()
+    public void OnDefeat()
     {
-        camera = GameObject.Find("Main Camera").GetComponent<Transform>();
-
-        textRedPoints = GameObject.Find("RedPoints").GetComponent<Text>();
-        textBluePoints = GameObject.Find("BluePoints").GetComponent<Text>();
+        if(isOnePlayerGame)
+        {
+            Time.timeScale = 0f;
+            panel.SetActive(true);
+            button.SetActive(false);
+        }
+        else if (!coroutineInProcess)
+        {
+            StartCoroutine("OnWin");
+        }
     }
+
     public IEnumerator OnWin()
     {
         coroutineInProcess = true;
@@ -56,7 +66,7 @@ public class GameManager : MonoBehaviour
         StopCoroutine("OnWin");
     }
 
-    private static void ProjDestroy()
+    private void ProjDestroy()
     {
         Time.timeScale = 1f;
         projectiles = GameObject.FindGameObjectsWithTag("Projectile");
@@ -72,8 +82,8 @@ public class GameManager : MonoBehaviour
         {
             case 1:
                 camera.position = new Vector3(-49f, 8.5f, -10f);
-                redSpawn = new Vector2(-42f, 13.5f);
-                blueSpawn = new Vector2(-56f, 3.5f);
+                redSpawn = new Vector2(-42f, 13f);
+                blueSpawn = new Vector2(-56f, 4f);
                 break;
             case 2:
                 camera.position = new Vector3(-24f, 8.5f, -10f);

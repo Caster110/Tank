@@ -4,8 +4,6 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     private GameObject targetPlayer;
-    private Vector3 directionOfTank;
-    private Vector3 directionToPlayer;
     private float speed;
     private Rigidbody2D rigidBody;
     private Vector2 rigidBodyNextPosition;
@@ -13,32 +11,35 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private GameObject projectile;
     [SerializeField] private Transform shotPoint;
     [SerializeField] private Transform centerPoint;
+    private Vector3 directionOfTank => shotPoint.position - centerPoint.position;
+    private Vector3 directionToPlayer => targetPlayer.transform.position - centerPoint.position;
 
     private RaycastHit2D raycastAim;
     private float timerBtwShots;
     private float staticTimeBtwShots;
-    public void Start()
+    private void Start()
     {
         targetPlayer = GameObject.Find("PlayerBlue");
         rigidBody = GetComponent<Rigidbody2D>();
         rigidBody.centerOfMass = Vector3.zero;
-        speed = 4f;
-        staticTimeBtwShots = 0.6f;
+        speed = 2.5f;
+        staticTimeBtwShots = 1.5f;
     }
 
-    public void Update()
-    {
-        timerBtwShots -= Time.deltaTime;
-    }
 
     private void FixedUpdate()
     {
-        SelectDirection();
-        raycastAim = Physics2D.Raycast(shotPoint.position, directionOfTank, 5f);
-        if (directionToPlayer.magnitude > 6f)
+        timerBtwShots -= Time.fixedDeltaTime;
+        raycastAim = Physics2D.Raycast(shotPoint.position, directionOfTank, 50f);
+
+        if (raycastAim.transform != targetPlayer.transform)
+            SelectDirection();
+        else if(directionToPlayer.magnitude >= 5f)
             Move();
-        else if (timerBtwShots <= 0 && raycastAim == targetPlayer)
+        if (timerBtwShots <= 0 && raycastAim.transform == targetPlayer.transform && directionToPlayer.magnitude < 10f)
             Shoot();
+        rigidBody.angularVelocity = 0f;
+        rigidBody.velocity = new Vector2(0, 0);
     }
     private void Move()
     {
@@ -48,30 +49,27 @@ public class EnemyController : MonoBehaviour
         rigidBodyNextPosition += objectNextPosition * Time.deltaTime * speed;
 
         rigidBody.MovePosition(rigidBodyNextPosition);
-        rigidBody.angularVelocity = 0f;
     }
 
-    private void Shoot ()
+    private void Shoot()
     {
         float radian = transform.rotation.eulerAngles.z * Mathf.Deg2Rad + Mathf.PI / 2;
         GameObject projectileObject = Instantiate(projectile, shotPoint.position, transform.rotation);
-        projectileObject.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos(radian), Mathf.Sin(radian)) * (speed + 2f);
+        projectileObject.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos(radian), Mathf.Sin(radian)) * (speed + 2.5f);
         timerBtwShots = staticTimeBtwShots;
     }
 
     private void SelectDirection()
     {
-        targetPlayer = GameObject.Find("PlayerBlue");
-        directionOfTank = shotPoint.position - centerPoint.position;
-        directionToPlayer = targetPlayer.transform.position - shotPoint.position;
-        if (raycastAim != targetPlayer)
-        {
-            RaycastHit2D raycastToPlayer = Physics2D.Raycast(shotPoint.position, directionToPlayer, 5f);
-            Vector3 side = Vector3.Cross(directionOfTank, directionToPlayer);
-            if(Vector3.SignedAngle(directionOfTank, directionToPlayer, Vector3.forward) > 0f)
-                rigidBody.MoveRotation(rigidBody.rotation + 2f);
-            else
-                rigidBody.MoveRotation(rigidBody.rotation - 2f);
-        }
+        Vector3 side = Vector3.Cross(directionOfTank, directionToPlayer);
+        if (side.z > 0)
+            rigidBody.MoveRotation(rigidBody.rotation + 2f);
+        else if (side.z < 0)
+            rigidBody.MoveRotation(rigidBody.rotation - 2f);
+    }
+
+    private void OnDestroy()
+    {
+        //Score.Increase();
     }
 }

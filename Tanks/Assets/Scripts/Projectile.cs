@@ -4,23 +4,22 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    private GameManager manager;
-    private float lifeTime = 8f;
+    private float lifeTime;
     void Start()
     {
-        Destroy(gameObject, lifeTime);
-        manager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        lifeTime = 5f;
+        if (gameObject.name == "ProjectileEnemy(Clone)")
+            Destroy(gameObject, lifeTime);
+        else
+            Destroy(gameObject, (lifeTime + 3f));
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Tank"))
         {
-            Destroy(collision.gameObject);
-
-            if (!GameManager.coroutineInProcess)
-                manager.StartCoroutine("OnWin");
-
+            if (collision.gameObject.name == "Enemy(Clone)")
+                Destroy(collision.gameObject);
             Destroy(gameObject);
         }
     }
@@ -29,7 +28,7 @@ public class Projectile : MonoBehaviour
     {
         if (gameObject.name == "ProjectileBlue(Clone)")
             MainPlayerController.projectileCount--;
-        else
+        else if(gameObject.name == "ProjectileRed(Clone)")
             SidePlayerController.projectileCount--;
     }
 }
