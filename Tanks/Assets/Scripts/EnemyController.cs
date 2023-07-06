@@ -7,6 +7,7 @@ public class EnemyController : MonoBehaviour
     private float speed;
     private Rigidbody2D rigidBody;
     private Vector2 rigidBodyNextPosition;
+    private Score score;
 
     [SerializeField] private GameObject projectile;
     [SerializeField] private Transform shotPoint;
@@ -19,11 +20,13 @@ public class EnemyController : MonoBehaviour
     private float staticTimeBtwShots;
     private void Start()
     {
+        score = GameObject.Find("GameManager").GetComponent<Score>();
         targetPlayer = GameObject.Find("PlayerBlue");
         rigidBody = GetComponent<Rigidbody2D>();
         rigidBody.centerOfMass = Vector3.zero;
         speed = 2.5f;
         staticTimeBtwShots = 1.5f;
+        Move();
     }
 
 
@@ -70,6 +73,7 @@ public class EnemyController : MonoBehaviour
 
     private void OnDestroy()
     {
-        //Score.Increase();
+        if(score.isActiveAndEnabled)
+            score.Increase();
     }
 }

@@ -14,6 +14,7 @@ public class SidePlayerController : GameManager
     private float staticTimeBtwShots;
     public static int projectileCount;
     private GameManager manager;
+    private int maxProjectileCount;
 
     void Start()
     {
@@ -23,13 +24,14 @@ public class SidePlayerController : GameManager
         speed = 4.5f;
         staticTimeBtwShots = 0.38f;
         manager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        maxProjectileCount = 7;
     }
 
     void Update()
     {
         if (timerBtwShots <= 0)
         {
-            if (Input.GetKey(KeyCode.Slash) && projectileCount <= 5 && Time.timeScale != 0f)
+            if (Input.GetKey(KeyCode.Slash) && projectileCount <= maxProjectileCount && Time.timeScale != 0f)
             {
                 float rotationToRadian = transform.rotation.eulerAngles.z * Mathf.Deg2Rad + Mathf.PI / 2;
                 GameObject projectileObject = Instantiate(projectile, shotPoint.position, transform.rotation);
@@ -47,8 +49,8 @@ public class SidePlayerController : GameManager
     {
         if (collision.gameObject.tag == "Projectile")
         {
-            manager.OnDefeat();
             blueWin = true;
+            manager.OnDefeat();
             Destroy(gameObject);
         }
     }

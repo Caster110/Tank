@@ -16,8 +16,11 @@ public class MenuManager : MonoBehaviour
         Application.Quit();
     }
 
-    public void Play()
+    public void Play(bool isSinglePlayer)
     {
-        SceneManager.LoadScene("TwoPlayersGame");
+        if (isSinglePlayer)
+            SceneManager.LoadScene("OnePlayerGame");
+        else
+            SceneManager.LoadScene("TwoPlayersGame");
     }
 }

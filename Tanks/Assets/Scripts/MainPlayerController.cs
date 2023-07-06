@@ -27,17 +27,14 @@ public class MainPlayerController : MonoBehaviour
         speed = 4.5f;
         staticTimeBtwShots = 0.38f;
         manager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        if (isOnePlayerGame)
-            maxProjectileCount = 10;
-        else
-            maxProjectileCount = 5;
+        maxProjectileCount = 7;
     }
 
     void Update()
     {
         if (timerBtwShots <= 0)
         {
-            if (Input.GetKey(KeyCode.V) && projectileCount < maxProjectileCount && Time.timeScale != 0f)
+            if (Input.GetKey(KeyCode.X) && projectileCount < maxProjectileCount && Time.timeScale != 0f)
             {
                 float rotationToRadian = transform.rotation.eulerAngles.z * Mathf.Deg2Rad + Mathf.PI / 2;
                 GameObject projectileObject = Instantiate(projectile, shotPoint.position, transform.rotation);
@@ -57,10 +54,10 @@ public class MainPlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Projectile")
         {
-            //manager.OnDefeat();
-            //Destroy(gameObject);
             if (!isOnePlayerGame)
                 manager.redWin = true;
+            manager.OnDefeat();
+            Destroy(gameObject);
         }
     }
 

@@ -13,7 +13,7 @@ public class EnemySpawner : MonoBehaviour
     void Start()
     {
         spawnPoints = GameObject.FindGameObjectsWithTag("Respawn");
-        staticTimeBtwSpawn = 5.5f;
+        staticTimeBtwSpawn = 4.5f;
         timerBtwSpawn = staticTimeBtwSpawn;
         randomizer = new System.Random();
     }
@@ -24,6 +24,7 @@ public class EnemySpawner : MonoBehaviour
         if(timerBtwSpawn <= 0)
         {
             SpawnEnemy();
+            timerBtwSpawn = staticTimeBtwSpawn;
         }
     }
 
@@ -53,7 +54,5 @@ public class EnemySpawner : MonoBehaviour
                 break;
         }
         Instantiate(enemyUnit, spawnPoints[randomSpawn].transform.position, Quaternion.Euler(rotationOfTank));
-
-        timerBtwSpawn = staticTimeBtwSpawn;
     }
 }

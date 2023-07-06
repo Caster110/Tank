@@ -8,8 +8,8 @@ public class GameManager : MonoBehaviour
 {
     protected GameObject[] projectiles;
     [SerializeField] private new Transform camera;
-    [SerializeField] private GameObject panel;
-    [SerializeField] private GameObject button;
+    [SerializeField] private GameObject panelDeath;
+    [SerializeField] private GameObject panelLive;
 
     public bool redWin;
     public bool blueWin;
@@ -30,14 +30,17 @@ public class GameManager : MonoBehaviour
     private int mapNumber = MenuManager.chosenMap;
     private bool isRandomMap = MenuManager.chosenRandomMap;
     protected bool isOnePlayerGame => SceneManager.GetActiveScene().name == "OnePlayerGame";
+    [SerializeField] private Score score;
 
     public void OnDefeat()
     {
         if(isOnePlayerGame)
         {
             Time.timeScale = 0f;
-            panel.SetActive(true);
-            button.SetActive(false);
+            panelDeath.SetActive(true);
+            panelLive.SetActive(false);
+            score = GetComponent<Score>(); 
+            score.OnDefeat();
         }
         else if (!coroutineInProcess)
         {
