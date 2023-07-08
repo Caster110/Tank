@@ -9,16 +9,23 @@ public class CameraFollow : MonoBehaviour
     private Vector3 modifiedPlayerPosition;
     private bool cameraInRange;
 
-    void Update()
+    private void Start()
     {
-        if (!player.IsDestroyed())
+        MainPlayerController.PlayerDeath += StopFollow;
+    }
+    private void Update()
+    {
             cameraInRange = player.position.y < 10.5f && player.position.y > -10.5f;
-        else
-            return;
         if (cameraInRange)
         {
             modifiedPlayerPosition = new Vector3(0, player.position.y, -10);
             transform.position = modifiedPlayerPosition;
         }
+    }
+
+    private void StopFollow ()
+    {
+        MainPlayerController.PlayerDeath -= StopFollow;
+        enabled = false;
     }
 }

@@ -4,15 +4,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour
+public class TwoPlayersGameManager : MonoBehaviour
 {
     protected GameObject[] projectiles;
     [SerializeField] private new Transform camera;
-    [SerializeField] private GameObject panelDeath;
-    [SerializeField] private GameObject panelLive;
-
-    public bool redWin;
-    public bool blueWin;
 
     [SerializeField] private Text textRedPoints;
     [SerializeField] private Text textBluePoints;
@@ -28,25 +23,6 @@ public class GameManager : MonoBehaviour
     private static Vector2 redSpawn;
     public static bool coroutineInProcess = false;
     private int mapNumber = MenuManager.chosenMap;
-    private bool isRandomMap = MenuManager.chosenRandomMap;
-    protected bool isOnePlayerGame => SceneManager.GetActiveScene().name == "OnePlayerGame";
-    [SerializeField] private Score score;
-
-    public void OnDefeat()
-    {
-        if(isOnePlayerGame)
-        {
-            Time.timeScale = 0f;
-            panelDeath.SetActive(true);
-            panelLive.SetActive(false);
-            score = GetComponent<Score>(); 
-            score.OnDefeat();
-        }
-        else if (!coroutineInProcess)
-        {
-            StartCoroutine("OnWin");
-        }
-    }
 
     public IEnumerator OnWin()
     {
@@ -79,49 +55,44 @@ public class GameManager : MonoBehaviour
 
     public void ChangeMap()
     {
-        //if (isRandomMap)
-        //    mapNumber = Random(1, 5);
         switch (mapNumber)
         {
             case 1:
                 camera.position = new Vector3(-49f, 8.5f, -10f);
-                redSpawn = new Vector2(-42f, 13f);
-                blueSpawn = new Vector2(-56f, 4f);
+                redSpawn = new Vector2(-43f, 10f);
+                blueSpawn = new Vector2(-55f, 7f);
                 break;
             case 2:
                 camera.position = new Vector3(-24f, 8.5f, -10f);
-                redSpawn = new Vector2(-19f, 11f);
-                blueSpawn = new Vector2(-29f, 6f);
+                redSpawn = new Vector2(-18f, 12f);
+                blueSpawn = new Vector2(-30f, 5f);
                 break;
             case 3:
                 camera.position = new Vector3(-50f, -7.5f, -10f);
-                redSpawn = new Vector2(-43f, -7.5f);
-                blueSpawn = new Vector2(-54f, -7.5f);
+                redSpawn = new Vector2(-41f, -11f);
+                blueSpawn = new Vector2(-57f, -4f);
                 break;
             case 4:
                 camera.position = new Vector3(-24f, -7.5f, -10f);
-                redSpawn = new Vector2(-19f, -20);
-                blueSpawn = new Vector2(-29f, -20f);
+                redSpawn = new Vector2(-15f, -7.5f);
+                blueSpawn = new Vector2(-33f, -7.5f);
                 break;
             case 5:
                 camera.position = new Vector3(-49f, -23.5f, -10f);
-                redSpawn = new Vector2(-44f, -20f);
-                blueSpawn = new Vector2(-54f, -20f);
+                redSpawn = new Vector2(-41f, -23.5f);
+                blueSpawn = new Vector2(-57f, -23.5f);
                 break;
             case 6:
                 camera.position = new Vector3(-24f, -23.5f, -10f);
-                redSpawn = new Vector2(-19f, -20f);
-                blueSpawn = new Vector2(-29f, -20f);
+                redSpawn = new Vector2(-15f, -23.5f);
+                blueSpawn = new Vector2(-33f, -23.5f);
                 break;
         }
-        Spawn();
+        SpawnPlayers();
     }
 
-    private void Spawn()
+    private void SpawnPlayers()
     {
-
-        redWin = false;
-        blueWin = false;
         if (coroutineInProcess)
         {
             Destroy(redPlayerOnScene);

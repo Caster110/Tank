@@ -4,37 +4,31 @@ using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainPlayerController : MonoBehaviour
+public class BluePlayerController : TwoPlayersGameManager
 {
-    private float speed;
+    private float speed = 4.5f;
     private Rigidbody2D rigidBody;
     private Vector2 rigidBodyNextPosition;
 
     [SerializeField] private GameObject projectile;
     [SerializeField] private Transform shotPoint;
     private float timerBtwShots;
-    private float staticTimeBtwShots;
+    private float staticTimeBtwShots = 0.38f;
     public static int projectileCount;
-    private int maxProjectileCount;
-    private GameManager manager;
-    private bool isOnePlayerGame => SceneManager.GetActiveScene().name == "OnePlayerGame";
+    private int maxProjectileCount = 7;
 
     void Start()
     {
         projectileCount = 0;
         rigidBody = GetComponent<Rigidbody2D>();
-        rigidBody.centerOfMass = Vector3.zero;
-        speed = 4.5f;
-        staticTimeBtwShots = 0.38f;
-        manager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        maxProjectileCount = 7;
+        rigidBody.centerOfMass = Vector3.zero;   
     }
 
     void Update()
     {
         if (timerBtwShots <= 0)
         {
-            if (Input.GetKey(KeyCode.X) && projectileCount < maxProjectileCount && Time.timeScale != 0f)
+            if (Input.GetKey(KeyCode.V) && projectileCount < maxProjectileCount && Time.timeScale != 0f)
             {
                 float rotationToRadian = transform.rotation.eulerAngles.z * Mathf.Deg2Rad + Mathf.PI / 2;
                 GameObject projectileObject = Instantiate(projectile, shotPoint.position, transform.rotation);
@@ -46,18 +40,6 @@ public class MainPlayerController : MonoBehaviour
         else
         {
             timerBtwShots -= Time.deltaTime;
-        }
-    }
-
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "Projectile")
-        {
-            if (!isOnePlayerGame)
-                manager.redWin = true;
-            manager.OnDefeat();
-            Destroy(gameObject);
         }
     }
 

@@ -1,7 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class Score : MonoBehaviour
 {
@@ -12,13 +12,17 @@ public class Score : MonoBehaviour
     private void Start()
     {
         scoreNumber = 0;
+        EnemyController.EnemyDeath += Increase;
+        MainPlayerController.PlayerDeath += FinalScore;
     }
     public void Increase()
     {
         scoreText.text = (++scoreNumber).ToString();
     }
-    public void OnDefeat()
+    public void FinalScore()
     {
         finalScoreText.text += scoreNumber.ToString();
+        EnemyController.EnemyDeath -= Increase;
+        MainPlayerController.PlayerDeath -= FinalScore;
     }
 }

@@ -2,29 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SidePlayerController : GameManager
+public class RedPlayerController : TwoPlayersGameManager
 {
-    private float speed;
+    private float speed = 4.5f;
     private Rigidbody2D rigidBody;
     private Vector2 rigidBodyNextPosition;
 
     [SerializeField] private GameObject projectile;
     [SerializeField] private Transform shotPoint;
     private float timerBtwShots;
-    private float staticTimeBtwShots;
+    private float staticTimeBtwShots = 0.38f;
     public static int projectileCount;
-    private GameManager manager;
-    private int maxProjectileCount;
+    private int maxProjectileCount = 7;
 
     void Start()
     {
         projectileCount = 0;
         rigidBody = GetComponent<Rigidbody2D>();
         rigidBody.centerOfMass = Vector3.zero;
-        speed = 4.5f;
-        staticTimeBtwShots = 0.38f;
-        manager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        maxProjectileCount = 7;
     }
 
     void Update()
@@ -45,16 +40,6 @@ public class SidePlayerController : GameManager
             timerBtwShots -= Time.deltaTime;
         }
     }
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "Projectile")
-        {
-            blueWin = true;
-            manager.OnDefeat();
-            Destroy(gameObject);
-        }
-    }
-
     void FixedUpdate()
     {
         rigidBodyNextPosition = rigidBody.position;

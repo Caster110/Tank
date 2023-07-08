@@ -5,9 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
-    public static int chosenMap = 1;
+    public static int chosenMap = 0;
     public static bool chosenRandomMap;
-    private void Choice(int i)
+    public void Choice(int i)
     {
         chosenMap = i;
     }
@@ -20,7 +20,7 @@ public class MenuManager : MonoBehaviour
     {
         if (isSinglePlayer)
             SceneManager.LoadScene("OnePlayerGame");
-        else
+        else if(chosenMap != 0)
             SceneManager.LoadScene("TwoPlayersGame");
     }
 }

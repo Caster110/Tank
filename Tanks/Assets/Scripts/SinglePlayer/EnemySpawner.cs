@@ -6,14 +6,14 @@ public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private GameObject enemyUnit;
     private GameObject[] spawnPoints;
-    private float staticTimeBtwSpawn;
+    private float staticTimeBtwSpawn = 4.5f;
     private float timerBtwSpawn;
+
     private System.Random randomizer;
 
     void Start()
     {
         spawnPoints = GameObject.FindGameObjectsWithTag("Respawn");
-        staticTimeBtwSpawn = 4.5f;
         timerBtwSpawn = staticTimeBtwSpawn;
         randomizer = new System.Random();
     }
