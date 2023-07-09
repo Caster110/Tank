@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using System;
-
+using UnityEngine.Events;
 public class MainPlayerController : MonoBehaviour
 {
     private float speed = 4.5f;
@@ -14,7 +14,8 @@ public class MainPlayerController : MonoBehaviour
     private float staticTimeBtwShots = 0.4f;
     public static int projectileCount;
     private int maxProjectileCount = 8;
-    public static Action PlayerDeath;
+
+    public UnityEvent PlayerDeath;
 
     void Start()
     {
@@ -60,7 +61,7 @@ public class MainPlayerController : MonoBehaviour
         rigidBody.angularVelocity = 0f;
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         PlayerDeath?.Invoke();
     }

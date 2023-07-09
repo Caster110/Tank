@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class EnemyController : MonoBehaviour
 {
@@ -18,7 +19,7 @@ public class EnemyController : MonoBehaviour
     private float timerBtwShots;
     private float staticTimeBtwShots = 1.5f;
 
-    public static Action EnemyDeath;
+    public static event UnityAction EnemyDeath;
     private void Start()
     {
         target = GameObject.Find("Player");

@@ -8,20 +8,19 @@ public class SinglePlayerGameManager : MonoBehaviour
 {
     [SerializeField] private GameObject panelDeath;
     [SerializeField] private GameObject panelLive;
+    [SerializeField] private Text finalScoreText;
+    [SerializeField] private Text scoreText;
 
-    private void Start()
-    {
-        MainPlayerController.PlayerDeath += OnDefeat;
-    }
     public void OnDefeat()
     {
         Time.timeScale = 0f;
         panelDeath.SetActive(true);
         panelLive.SetActive(false);
-        MainPlayerController.PlayerDeath -= OnDefeat;
+        finalScoreText.text += scoreText.text;
     }
     public void LoadMainMenu()
     {
+        ChangePauseCondition();
         SceneManager.LoadScene("Menu");
     }
     public void Restart()

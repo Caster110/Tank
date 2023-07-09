@@ -232,6 +232,9 @@ MonoBehaviour:
   projectile: {fileID: 4507273749808706537, guid: 02b5a47063eac8c4199f7df03e716f32, type: 3}
   shotPoint: {fileID: 552548430414510843}
   centerPoint: {fileID: 7828534252676750630}
+  EnemyDeath:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &6298961351151866976
 GameObject:
   m_ObjectHideFlags: 0
