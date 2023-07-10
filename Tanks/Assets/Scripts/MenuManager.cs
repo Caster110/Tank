@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Profiling;
 using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
@@ -24,7 +21,7 @@ public class MenuManager : MonoBehaviour
 
     private void Start()
     {
-        string recordsFilePath = Path.Combine("StreamingAssets", "Records.txt");
+        string recordsFilePath = Path.Combine(Application.dataPath, "StreamingAssets", "Records.txt");
 
         if (File.Exists(recordsFilePath))
         {
@@ -76,16 +73,16 @@ public class MenuManager : MonoBehaviour
     {
         PlayerPrefs.DeleteAll();
 
-        Record1.text = "1. -";
-        Record2.text = "2. -";
-        Record3.text = "3. -";
-        Record4.text = "4. -";
-        Record5.text = "5. -";
-        Record6.text = "6. -";
-        Record7.text = "7. -";
-        Record8.text = "8. -";
-        Record9.text = "9. -";
-        Record10.text = "10. -";
+        Record1.text = "1. 0";
+        Record2.text = "2. 0";
+        Record3.text = "3. 0";
+        Record4.text = "4. 0";
+        Record5.text = "5. 0";
+        Record6.text = "6. 0";
+        Record7.text = "7. 0";
+        Record8.text = "8. 0";
+        Record9.text = "9. 0";
+        Record10.text = "10. 0";
 
         string recordsFilePath = Path.Combine("StreamingAssets", "Records.txt");
 

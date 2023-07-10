@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RedPlayerController : TwoPlayersGameManager
@@ -11,9 +9,9 @@ public class RedPlayerController : TwoPlayersGameManager
     [SerializeField] private GameObject projectile;
     [SerializeField] private Transform shotPoint;
     private float timerBtwShots;
-    private float staticTimeBtwShots = 0.38f;
+    private float staticTimeBtwShots = 0.4f;
     public static int projectileCount;
-    private int maxProjectileCount = 7;
+    private int maxProjectileCount = 6;
 
     void Start()
     {
@@ -26,7 +24,7 @@ public class RedPlayerController : TwoPlayersGameManager
     {
         if (timerBtwShots <= 0)
         {
-            if (Input.GetKey(KeyCode.Slash) && projectileCount <= maxProjectileCount && Time.timeScale != 0f)
+            if (Input.GetKey(KeyCode.Slash) && projectileCount < maxProjectileCount && Time.timeScale != 0f)
             {
                 float rotationToRadian = transform.rotation.eulerAngles.z * Mathf.Deg2Rad + Mathf.PI / 2;
                 GameObject projectileObject = Instantiate(projectile, shotPoint.position, transform.rotation);

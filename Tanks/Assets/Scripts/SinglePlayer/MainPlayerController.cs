@@ -61,8 +61,9 @@ public class MainPlayerController : MonoBehaviour
         rigidBody.angularVelocity = 0f;
     }
 
-    private void OnDisable()
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        PlayerDeath?.Invoke();
+        if(collision.gameObject.tag == "Projectile")
+            PlayerDeath?.Invoke();
     }
 }

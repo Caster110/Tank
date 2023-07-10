@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
@@ -31,28 +29,8 @@ public class EnemySpawner : MonoBehaviour
     private void SpawnEnemy()
     {
         Vector3 rotationOfTank = new Vector3(0, 0, 0);
-        int randomSpawn = randomizer.Next(7);
-        switch (randomSpawn)
-        {
-            case 0:
-            case 1:
-            case 9:
-                rotationOfTank = new Vector3(0, 0, -90);
-                break;
-            case 4:
-            case 5:
-            case 6:
-                rotationOfTank = new Vector3(0, 0, 90);
-                break;
-            case 2:
-            case 3:
-                rotationOfTank = new Vector3(0, 0, 180);
-                break;
-            case 7:
-            case 8:
-                rotationOfTank = new Vector3(0, 0, 0);
-                break;
-        }
-        Instantiate(enemyUnit, spawnPoints[randomSpawn].transform.position, Quaternion.Euler(rotationOfTank));
+        int randomSpawn = randomizer.Next(9);
+        Transform spawnPoint = spawnPoints[randomSpawn].transform;
+        Instantiate(enemyUnit, spawnPoint.position, spawnPoint.rotation);
     }
 }

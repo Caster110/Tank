@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -34,8 +33,8 @@ public class TwoPlayersGameManager : MonoBehaviour
 
     public void Restart()
     {
-        SceneManager.LoadScene("OnePlayerGame");
         ChangePauseCondition();
+        SceneManager.LoadScene("TwoPlayersGame");
     }
 
     public void LoadMainMenu()
@@ -78,6 +77,7 @@ public class TwoPlayersGameManager : MonoBehaviour
         switch (mapNumber)
         {
             case 1:
+            default:
                 camera.position = new Vector3(-49f, 8.5f, -10f);
                 redSpawn = new Vector2(-43f, 10f);
                 blueSpawn = new Vector2(-55f, 7f);

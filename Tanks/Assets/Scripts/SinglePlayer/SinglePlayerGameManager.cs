@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -13,7 +11,7 @@ public class SinglePlayerGameManager : MonoBehaviour
 
     public void OnDefeat()
     {
-        Time.timeScale = 0f;
+        ChangePauseCondition();
         panelDeath.SetActive(true);
         panelLive.SetActive(false);
         finalScoreText.text += scoreText.text;
@@ -25,8 +23,8 @@ public class SinglePlayerGameManager : MonoBehaviour
     }
     public void Restart()
     {
-        SceneManager.LoadScene("OnePlayerGame");
         ChangePauseCondition();
+        SceneManager.LoadScene("OnePlayerGame");
     }
     public void ChangePauseCondition()
     {

@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -18,8 +17,6 @@ public class EnemyController : MonoBehaviour
     private RaycastHit2D raycastAim;
     private float timerBtwShots;
     private float staticTimeBtwShots = 1.5f;
-
-    public static event UnityAction EnemyDeath;
     private void Start()
     {
         target = GameObject.Find("Player");
@@ -67,10 +64,5 @@ public class EnemyController : MonoBehaviour
             rigidBody.MoveRotation(rigidBody.rotation + 2f);
         else if (side.z < 0)
             rigidBody.MoveRotation(rigidBody.rotation - 2f);
-    }
-
-    private void OnDestroy()
-    {
-        EnemyDeath?.Invoke();
     }
 }

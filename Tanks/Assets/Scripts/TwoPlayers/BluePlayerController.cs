@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class BluePlayerController : TwoPlayersGameManager
 {
@@ -12,9 +9,9 @@ public class BluePlayerController : TwoPlayersGameManager
     [SerializeField] private GameObject projectile;
     [SerializeField] private Transform shotPoint;
     private float timerBtwShots;
-    private float staticTimeBtwShots = 0.38f;
+    private float staticTimeBtwShots = 0.4f;
     public static int projectileCount;
-    private int maxProjectileCount = 7;
+    private int maxProjectileCount = 6;
 
     void Start()
     {

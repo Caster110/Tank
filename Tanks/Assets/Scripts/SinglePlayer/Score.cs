@@ -14,7 +14,26 @@ public class Score : MonoBehaviour
     private void Start()
     {
         scoreNumber = 0;
-        EnemyController.EnemyDeath += Increase;
+        SinglePlayerProjectile.EnemyDeath += Increase;
+
+        string recordsFilePath = Path.Combine(Application.dataPath, "StreamingAssets", "Records.txt");
+
+        if (File.Exists(recordsFilePath))
+        {
+            string[] lines = File.ReadAllLines(recordsFilePath);
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                if (int.TryParse(lines[i], out int value))
+                    scoreArray[i] = int.Parse(lines[i]);
+                else
+                    Debug.LogWarning("Ошибка при парсинге строки " + (i + 1) + " в файле " + recordsFilePath);
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Файл " + recordsFilePath + " не найден");
+        }
     }
     public void Increase()
     {
@@ -23,7 +42,6 @@ public class Score : MonoBehaviour
     public void FinalScore()
     {
         AddScoreArray();
-        EnemyController.EnemyDeath -= Increase;
     }
 
     public void AddScoreArray()
@@ -49,15 +67,11 @@ public class Score : MonoBehaviour
             for (int i = 1; i < scoreArray.Length; i++)
             {
                 if (scoreArray[i] < scoreArray[minIndex])
-                {
                     minIndex = i;
-                }
             }
 
             if (scoreNumber > scoreArray[minIndex])
-            {
                 scoreArray[minIndex] = scoreNumber;
-            }
         }
 
         Array.Sort(scoreArray);
@@ -78,9 +92,12 @@ public class Score : MonoBehaviour
         string recordsFilePath = Path.Combine(Application.dataPath, "StreamingAssets", "Records.txt");
         string[] scoreStrings = new string[scoreArray.Length];
         for (int i = 0; i < scoreArray.Length; i++)
-        {
             scoreStrings[i] = scoreArray[i].ToString();
-        }
         File.WriteAllLines(recordsFilePath, scoreStrings);
+    }
+
+    private void OnDestroy()
+    {
+        SinglePlayerProjectile.EnemyDeath -= Increase;
     }
 }
