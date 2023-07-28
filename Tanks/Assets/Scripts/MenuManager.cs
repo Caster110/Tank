@@ -84,7 +84,7 @@ public class MenuManager : MonoBehaviour
         Record9.text = "9. 0";
         Record10.text = "10. 0";
 
-        string recordsFilePath = Path.Combine("StreamingAssets", "Records.txt");
+        string recordsFilePath = Path.Combine(Application.dataPath, "StreamingAssets", "Records.txt");
 
         if (File.Exists(recordsFilePath))
         {

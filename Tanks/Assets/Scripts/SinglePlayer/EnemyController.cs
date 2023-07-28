@@ -28,7 +28,6 @@ public class EnemyController : MonoBehaviour
     {
         timerBtwShots -= Time.fixedDeltaTime;
         raycastAim = Physics2D.Raycast(shotPoint.position, directionOfTank, 50f);
-
         if (raycastAim.transform != target.transform)
             SelectDirection();
         else if(directionToPlayer.magnitude >= 5f)
