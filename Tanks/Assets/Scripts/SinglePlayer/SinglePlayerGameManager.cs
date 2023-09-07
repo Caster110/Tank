@@ -11,24 +11,24 @@ public class SinglePlayerGameManager : MonoBehaviour
 
     public void OnDefeat()
     {
-        ChangePauseCondition();
+        ChangePauseCondition("defeat");
         panelDeath.SetActive(true);
         panelLive.SetActive(false);
         finalScoreText.text += scoreText.text;
     }
     public void LoadMainMenu()
     {
-        ChangePauseCondition();
+        ChangePauseCondition("exit");
         SceneManager.LoadScene("Menu");
     }
     public void Restart()
     {
-        ChangePauseCondition();
+        ChangePauseCondition("restart");
         SceneManager.LoadScene("OnePlayerGame");
     }
-    public void ChangePauseCondition()
+    public void ChangePauseCondition(string description)
     {
-        if (Time.timeScale == 0f)
+        if (description == "restart" || description == "exit" || description == "play")
             Time.timeScale = 1f;
         else
             Time.timeScale = 0f;

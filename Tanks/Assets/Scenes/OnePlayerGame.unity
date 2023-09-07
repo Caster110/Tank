@@ -872,7 +872,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1933965986078156489, guid: 43445ee33600c1a4591a488673169f6c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1933965986078156489, guid: 43445ee33600c1a4591a488673169f6c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -936,7 +936,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1933965986078156489, guid: 43445ee33600c1a4591a488673169f6c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_StringArgument
-      value: Pause
+      value: play
       objectReference: {fileID: 0}
     - target: {fileID: 1933965986078156489, guid: 43445ee33600c1a4591a488673169f6c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -1593,7 +1593,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1933965986078156489, guid: 43445ee33600c1a4591a488673169f6c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1933965986078156489, guid: 43445ee33600c1a4591a488673169f6c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -1645,7 +1645,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1933965986078156489, guid: 43445ee33600c1a4591a488673169f6c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_StringArgument
-      value: Pause
+      value: pause
       objectReference: {fileID: 0}
     - target: {fileID: 1933965986078156489, guid: 43445ee33600c1a4591a488673169f6c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -5272,6 +5272,10 @@ PrefabInstance:
     - target: {fileID: 1454004549298236253, guid: 0571e06a7b8a4814ba1c53804cdcc928, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 1454004549298236253, guid: 0571e06a7b8a4814ba1c53804cdcc928, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1600747020439369777, guid: 0571e06a7b8a4814ba1c53804cdcc928, type: 3}
       propertyPath: m_RootOrder

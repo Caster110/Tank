@@ -23,9 +23,9 @@ public class TwoPlayersGameManager : MonoBehaviour
     public static bool coroutineInProcess = false;
     private int mapNumber = MenuManager.chosenMap;
 
-    public void ChangePauseCondition()
+    public void ChangePauseCondition(string description)
     {
-        if (Time.timeScale == 0f)
+        if (description == "restart" || description == "exit" || description == "play")
             Time.timeScale = 1f;
         else
             Time.timeScale = 0f;
@@ -33,13 +33,13 @@ public class TwoPlayersGameManager : MonoBehaviour
 
     public void Restart()
     {
-        ChangePauseCondition();
+        ChangePauseCondition("restart");
         SceneManager.LoadScene("TwoPlayersGame");
     }
 
     public void LoadMainMenu()
     {
-        ChangePauseCondition();
+        ChangePauseCondition("exit");
         SceneManager.LoadScene("Menu");
     }
 
@@ -47,7 +47,7 @@ public class TwoPlayersGameManager : MonoBehaviour
     {
         coroutineInProcess = true;
         yield return new WaitForSeconds(3);
-        Time.timeScale = 0f;
+        ChangePauseCondition("win");
         yield return new WaitForSecondsRealtime(1);
 
         if (bluePlayerOnScene == null)
@@ -55,7 +55,7 @@ public class TwoPlayersGameManager : MonoBehaviour
         if (redPlayerOnScene == null)
             textBluePoints.text = (++valueBluePoints).ToString();
 
-        yield return new WaitForSecondsRealtime(3);
+        yield return new WaitForSecondsRealtime(2);
 
         ProjDestroy();
         ChangeMap();
