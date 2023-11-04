@@ -35,6 +35,9 @@ public class TwoPlayersGameManager : MonoBehaviour
     {
         ChangePauseCondition("restart");
         SceneManager.LoadScene("TwoPlayersGame");
+        valueBluePoints = 0;
+        valueRedPoints = 0;
+        coroutineInProcess = false;
     }
 
     public void LoadMainMenu()
@@ -88,7 +91,7 @@ public class TwoPlayersGameManager : MonoBehaviour
                 blueSpawn = new Vector2(-30f, 5f);
                 break;
             case 3:
-                camera.position = new Vector3(-50f, -7.5f, -10f);
+                camera.position = new Vector3(-49f, -7.5f, -10f);
                 redSpawn = new Vector2(-41f, -11f);
                 blueSpawn = new Vector2(-57f, -4f);
                 break;
